@@ -1,0 +1,51 @@
+# Baut bei jeder Änderung automatisch eine installierbare APK.
+# Die fertige Datei liegt danach unter "Actions" → letzter Lauf → "Artifacts"
+# und kann dort im Browser heruntergeladen werden. Auf dem Laptop wird dafür
+# weder Android Studio noch Gradle benötigt.
+
+name: APK bauen
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+  workflow_dispatch:      # erlaubt das manuelle Starten per Knopfdruck im Browser
+
+jobs:
+  build:
+    # Bei der internen GitHub-Instanz gibt es evtl. keine "ubuntu-latest"-Runner.
+    # Dann hier stattdessen das Label des firmeneigenen Runners eintragen,
+    # z. B.: runs-on: [self-hosted, linux]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Projekt auschecken
+        uses: actions/checkout@v4
+
+      - name: JDK 17 einrichten
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      # Nur nötig, falls auf dem Runner kein Android-SDK vorinstalliert ist
+      # (bei GitHub-eigenen Runnern ist es vorhanden). Zum Aktivieren die
+      # folgenden drei Zeilen entkommentieren:
+      # - name: Android-SDK einrichten
+      #   uses: android-actions/setup-android@v3
+
+      - name: Gradle einrichten
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Ausführungsrecht für gradlew setzen
+        run: chmod +x ./gradlew
+
+      - name: Debug-APK bauen
+        run: ./gradlew assembleDebug --stacktrace
+
+      - name: APK zum Download bereitstellen
+        uses: actions/upload-artifact@v4
+        with:
+          name: Barcode-Checker-APK
+          path: app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error

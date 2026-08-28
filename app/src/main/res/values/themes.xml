@@ -1,0 +1,20 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="Theme.BarcodeCMM" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@color/background</item>
+        <item name="colorPrimary">@color/text_primary</item>
+        <item name="colorPrimaryDark">@color/background</item>
+        <!-- Farbe der aktivierten Schalter im Einstellungs-Menü -->
+        <item name="colorAccent">@color/accent</item>
+        <item name="colorControlActivated">@color/accent</item>
+    </style>
+
+    <style name="Theme.BarcodeCMM.Fullscreen">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsTranslucent" tools:ignore="NewApi">false</item>
+    </style>
+
+</resources>

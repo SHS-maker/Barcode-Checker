@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- App title with settings access -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/app_name"
+            android:textAllCaps="true"
+            android:textColor="@color/text_muted"
+            android:textSize="13sp"
+            android:letterSpacing="0.15" />
+
+        <ImageButton
+            android:id="@+id/btnSettings"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="end|center_vertical"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/settings_open"
+            android:padding="8dp"
+            android:src="@drawable/ic_settings" />
+
+    </FrameLayout>
+
+    <!-- Barcode 1 -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:text="@string/label_barcode1"
+        android:textAllCaps="true"
+        android:textColor="@color/text_muted"
+        android:textSize="13sp"
+        android:letterSpacing="0.08" />
+
+    <TextView
+        android:id="@+id/tvBarcode1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/bg_field"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="@string/placeholder_waiting"
+        android:textColor="@color/text_primary"
+        android:maxLines="3"
+        app:autoSizeTextType="uniform"
+        app:autoSizeMinTextSize="11sp"
+        app:autoSizeMaxTextSize="20sp"
+        app:autoSizeStepGranularity="1sp" />
+
+    <!-- Barcode 2 -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:text="@string/label_barcode2"
+        android:textAllCaps="true"
+        android:textColor="@color/text_muted"
+        android:textSize="13sp"
+        android:letterSpacing="0.08" />
+
+    <TextView
+        android:id="@+id/tvBarcode2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/bg_field"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="@string/placeholder_waiting"
+        android:textColor="@color/text_primary"
+        android:maxLines="3"
+        app:autoSizeTextType="uniform"
+        app:autoSizeMinTextSize="11sp"
+        app:autoSizeMaxTextSize="20sp"
+        app:autoSizeStepGranularity="1sp" />
+
+    <!-- Result -->
+    <TextView
+        android:id="@+id/tvResult"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.5"
+        android:background="@drawable/bg_field"
+        android:gravity="center"
+        android:textColor="@color/text_primary"
+        android:textStyle="bold"
+        android:textSize="30sp"
+        android:letterSpacing="0.05" />
+
+    <!-- Manual reset -->
+    <Button
+        android:id="@+id/btnReset"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/bg_field"
+        android:foreground="?attr/selectableItemBackground"
+        android:elevation="0dp"
+        android:stateListAnimator="@null"
+        android:text="@string/button_reset"
+        android:textColor="@color/text_primary"
+        android:textSize="16sp"
+        android:letterSpacing="0.08"
+        android:textStyle="bold" />
+
+    <!-- Fallback for damaged barcodes -->
+    <Button
+        android:id="@+id/btnManualEntry"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_field"
+        android:foreground="?attr/selectableItemBackground"
+        android:elevation="0dp"
+        android:stateListAnimator="@null"
+        android:text="@string/button_manual_entry"
+        android:textColor="@color/text_muted"
+        android:textSize="14sp"
+        android:letterSpacing="0.05" />
+
+    <!-- Hidden input that captures the scanner's keyboard-emulation output.
+         Kept off-screen (not width/height=0) so it stays focusable and reliably
+         receives key events, but is never visible to the user. -->
+    <EditText
+        android:id="@+id/etScannerInput"
+        android:layout_width="1px"
+        android:layout_height="1px"
+        android:layout_marginTop="-1px"
+        android:background="@null"
+        android:cursorVisible="false"
+        android:imeOptions="actionNone"
+        android:inputType="text"
+        android:maxLines="1"
+        android:textColor="@color/background"
+        android:textCursorDrawable="@null" />
+
+</LinearLayout>

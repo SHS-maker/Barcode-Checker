@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:fillViewport="true"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="@string/settings_title"
+            android:textAllCaps="true"
+            android:textColor="@color/text_primary"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.1" />
+
+        <!-- Knöpfe -->
+        <TextView style="@style/SettingsGroupLabel" android:text="@string/settings_group_buttons" />
+
+        <LinearLayout style="@style/SettingsCard">
+
+            <LinearLayout style="@style/SettingsRow">
+                <TextView style="@style/SettingsRowLabel" android:text="@string/settings_show_reset" />
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swShowReset"
+                    style="@style/SettingsSwitch" />
+            </LinearLayout>
+
+            <View style="@style/SettingsDivider" />
+
+            <LinearLayout style="@style/SettingsRow">
+                <TextView style="@style/SettingsRowLabel" android:text="@string/settings_show_manual" />
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swShowManual"
+                    style="@style/SettingsSwitch" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Rückmeldung -->
+        <TextView style="@style/SettingsGroupLabel" android:text="@string/settings_group_feedback" />
+
+        <LinearLayout style="@style/SettingsCard">
+
+            <LinearLayout style="@style/SettingsRow">
+                <TextView style="@style/SettingsRowLabel" android:text="@string/settings_sound" />
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swSound"
+                    style="@style/SettingsSwitch" />
+            </LinearLayout>
+
+            <View style="@style/SettingsDivider" />
+
+            <LinearLayout style="@style/SettingsRow">
+                <LinearLayout style="@style/SettingsRowTextGroup">
+                    <TextView style="@style/SettingsRowTitle" android:text="@string/settings_vibration" />
+                    <TextView style="@style/SettingsRowHint" android:text="@string/settings_vibration_hint" />
+                </LinearLayout>
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swVibration"
+                    style="@style/SettingsSwitch" />
+            </LinearLayout>
+
+            <View style="@style/SettingsDivider" />
+
+            <LinearLayout style="@style/SettingsRow">
+                <LinearLayout style="@style/SettingsRowTextGroup">
+                    <TextView style="@style/SettingsRowTitle" android:text="@string/settings_fullscreen_flash" />
+                    <TextView style="@style/SettingsRowHint" android:text="@string/settings_fullscreen_flash_hint" />
+                </LinearLayout>
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swFullscreenFlash"
+                    style="@style/SettingsSwitch" />
+            </LinearLayout>
+
+            <View style="@style/SettingsDivider" />
+
+            <LinearLayout style="@style/SettingsRow">
+                <LinearLayout style="@style/SettingsRowTextGroup">
+                    <TextView style="@style/SettingsRowTitle" android:text="@string/settings_highlight_diff" />
+                    <TextView style="@style/SettingsRowHint" android:text="@string/settings_highlight_diff_hint" />
+                </LinearLayout>
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swHighlightDiff"
+                    style="@style/SettingsSwitch" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Vergleich -->
+        <TextView style="@style/SettingsGroupLabel" android:text="@string/settings_group_tolerance" />
+
+        <LinearLayout style="@style/SettingsCard">
+
+            <LinearLayout style="@style/SettingsRow">
+                <LinearLayout style="@style/SettingsRowTextGroup">
+                    <TextView style="@style/SettingsRowTitle" android:text="@string/settings_tolerance_contains" />
+                    <TextView style="@style/SettingsRowHint" android:text="@string/settings_tolerance_contains_hint" />
+                </LinearLayout>
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swToleranceContains"
+                    style="@style/SettingsSwitch" />
+            </LinearLayout>
+
+            <View style="@style/SettingsDivider" />
+
+            <LinearLayout style="@style/SettingsRow">
+                <LinearLayout style="@style/SettingsRowTextGroup">
+                    <TextView style="@style/SettingsRowTitle" android:text="@string/settings_tolerance_zero" />
+                    <TextView style="@style/SettingsRowHint" android:text="@string/settings_tolerance_zero_hint" />
+                </LinearLayout>
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swToleranceZero"
+                    style="@style/SettingsSwitch" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Automatischer Reset -->
+        <TextView style="@style/SettingsGroupLabel" android:text="@string/settings_group_reset" />
+
+        <LinearLayout style="@style/SettingsCard">
+
+            <LinearLayout style="@style/SettingsRow">
+                <LinearLayout style="@style/SettingsRowTextGroup">
+                    <TextView style="@style/SettingsRowTitle" android:text="@string/settings_auto_reset" />
+                    <TextView style="@style/SettingsRowHint" android:text="@string/settings_auto_reset_hint" />
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/etAutoReset"
+                    android:layout_width="64dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:background="@drawable/bg_field"
+                    android:gravity="center"
+                    android:hint="@string/settings_seconds_hint"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:padding="8dp"
+                    android:textColor="@color/text_primary"
+                    android:textColorHint="@color/text_muted"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnDone"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/bg_field"
+            android:foreground="?attr/selectableItemBackground"
+            android:elevation="0dp"
+            android:stateListAnimator="@null"
+            android:text="@string/settings_done"
+            android:textColor="@color/text_primary"
+            android:textSize="16sp"
+            android:letterSpacing="0.08"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+</ScrollView>
