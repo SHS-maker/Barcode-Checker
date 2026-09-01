@@ -2,6 +2,7 @@
     <string name="app_name">Barcode Checker</string>
     <string name="label_barcode1">Barcode 1</string>
     <string name="label_barcode2">Barcode 2</string>
+    <string name="label_barcode3">Barcode 3</string>
     <string name="placeholder_waiting">Scan…</string>
     <string name="result_correct">CORRECT</string>
     <string name="result_incorrect">INCORRECT</string>
@@ -9,6 +10,7 @@
     <string name="button_manual_entry">Manuelle Eingabe</string>
     <string name="manual_entry_title_1">Barcode 1 eingeben</string>
     <string name="manual_entry_title_2">Barcode 2 eingeben</string>
+    <string name="manual_entry_title_3">Barcode 3 eingeben</string>
     <string name="manual_entry_hint">Barcode</string>
     <string name="manual_entry_confirm">OK</string>
     <string name="manual_entry_cancel">Abbrechen</string>
@@ -20,7 +22,7 @@
 
     <string name="settings_group_buttons">Knöpfe</string>
     <string name="settings_show_reset">RESET-Knopf anzeigen</string>
-    <string name="settings_show_manual">Knopf „Manuelle Eingabe“ anzeigen</string>
+    <string name="settings_show_manual">Knopf „Manuelle Eingabe" anzeigen</string>
 
     <string name="settings_group_feedback">Rückmeldung</string>
     <string name="settings_sound">Signaltöne abspielen</string>
@@ -34,7 +36,7 @@
     <string name="settings_group_tolerance">Vergleich</string>
     <string name="settings_tolerance_contains">Teil-Übereinstimmung erlauben</string>
     <string name="settings_tolerance_contains_hint">CORRECT, wenn ein Barcode vollständig im anderen enthalten ist</string>
-    <string name="settings_tolerance_zero">Eine zusätzliche „0“ ignorieren</string>
+    <string name="settings_tolerance_zero">Eine zusätzliche „0" ignorieren</string>
     <string name="settings_tolerance_zero_hint">CORRECT, wenn sich die Codes nur um eine einzelne 0 unterscheiden</string>
 
     <string name="settings_group_reset">Automatischer Reset</string>

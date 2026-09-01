@@ -36,18 +36,19 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 
 /**
- * Displays two consecutive scans from the RS38's integrated scanner (configured
+ * Displays three consecutive scans from the RS38's integrated scanner (configured
  * on-device to run in keyboard-emulation / HID mode) and checks that they match.
  * The scanner's output arrives as ordinary key events into [etScannerInput];
  * no CipherLAB SDK integration is needed.
  */
 class MainActivity : AppCompatActivity() {
 
-    private enum class ScanState { WAITING_BARCODE1, WAITING_BARCODE2, SHOWING_RESULT }
+    private enum class ScanState { WAITING_BARCODE1, WAITING_BARCODE2, WAITING_BARCODE3, SHOWING_RESULT }
 
     private lateinit var root: LinearLayout
     private lateinit var tvBarcode1: TextView
     private lateinit var tvBarcode2: TextView
+    private lateinit var tvBarcode3: TextView
     private lateinit var tvResult: TextView
     private lateinit var etScannerInput: EditText
     private lateinit var btnReset: Button
@@ -63,6 +64,7 @@ class MainActivity : AppCompatActivity() {
 
     private var state = ScanState.WAITING_BARCODE1
     private var barcode1: String? = null
+    private var barcode2: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,6 +76,7 @@ class MainActivity : AppCompatActivity() {
         root = findViewById(R.id.root)
         tvBarcode1 = findViewById(R.id.tvBarcode1)
         tvBarcode2 = findViewById(R.id.tvBarcode2)
+        tvBarcode3 = findViewById(R.id.tvBarcode3)
         tvResult = findViewById(R.id.tvResult)
         etScannerInput = findViewById(R.id.etScannerInput)
         btnReset = findViewById(R.id.btnReset)
@@ -174,10 +177,11 @@ class MainActivity : AppCompatActivity() {
     private fun showManualEntryDialog() {
         if (state == ScanState.SHOWING_RESULT) return
 
-        val titleRes = if (state == ScanState.WAITING_BARCODE1) {
-            R.string.manual_entry_title_1
-        } else {
-            R.string.manual_entry_title_2
+        val titleRes = when (state) {
+            ScanState.WAITING_BARCODE1 -> R.string.manual_entry_title_1
+            ScanState.WAITING_BARCODE2 -> R.string.manual_entry_title_2
+            ScanState.WAITING_BARCODE3 -> R.string.manual_entry_title_3
+            ScanState.SHOWING_RESULT -> R.string.manual_entry_title_1
         }
         val input = EditText(this).apply {
             inputType = InputType.TYPE_CLASS_TEXT
@@ -205,10 +209,16 @@ class MainActivity : AppCompatActivity() {
                 state = ScanState.WAITING_BARCODE2
             }
             ScanState.WAITING_BARCODE2 -> {
+                barcode2 = code
                 tvBarcode2.text = code
+                state = ScanState.WAITING_BARCODE3
+            }
+            ScanState.WAITING_BARCODE3 -> {
+                tvBarcode3.text = code
                 val first = barcode1.orEmpty()
-                val match = barcodesMatch(first, code)
-                if (!match && settings.highlightDifferences) highlightDifferences(first, code)
+                val second = barcode2.orEmpty()
+                val match = barcodesMatch(first, second, code)
+                if (!match && settings.highlightDifferences) highlightDifferences(first, second, code)
                 showResult(match)
                 state = ScanState.SHOWING_RESULT
                 val seconds = settings.autoResetSeconds
@@ -223,17 +233,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Exakte Übereinstimmung zählt immer. Zusätzlich – sofern in den
-     * Einstellungen aktiviert – auch: ein Code vollständig im anderen enthalten,
-     * oder der längere Code ist der kürzere mit genau einer zusätzlichen '0'.
+     * Exakte Übereinstimmung aller drei zählt immer. Zusätzlich – sofern in den
+     * Einstellungen aktiviert – auch: Toleranzen für alle Paare-Kombinationen.
      */
-    private fun barcodesMatch(a: String, b: String): Boolean {
-        if (a == b) return true
-        if (settings.toleranceContains && (a.contains(b) || b.contains(a))) return true
-        if (settings.toleranceExtraZero &&
-            (matchesWithOneExtraZero(a, b) || matchesWithOneExtraZero(b, a))
-        ) return true
-        return false
+    private fun barcodesMatch(a: String, b: String, c: String): Boolean {
+        if (a == b && b == c) return true
+        if (!settings.toleranceContains && !settings.toleranceExtraZero) return false
+
+        val pairMatches = { x: String, y: String ->
+            if (x == y) true
+            else if (settings.toleranceContains && (x.contains(y) || y.contains(x))) true
+            else if (settings.toleranceExtraZero &&
+                (matchesWithOneExtraZero(x, y) || matchesWithOneExtraZero(y, x))
+            ) true
+            else false
+        }
+
+        return pairMatches(a, b) && pairMatches(b, c) && pairMatches(a, c)
     }
 
     private fun matchesWithOneExtraZero(shorter: String, longer: String): Boolean {
@@ -241,11 +257,33 @@ class MainActivity : AppCompatActivity() {
         return longer.indices.any { i -> longer[i] == '0' && longer.removeRange(i, i + 1) == shorter }
     }
 
-    /** Markiert bei INCORRECT in beiden Feldern die Zeichen, die im anderen Code fehlen. */
-    private fun highlightDifferences(first: String, second: String) {
-        val (diffFirst, diffSecond) = differingIndices(first, second)
-        tvBarcode1.text = withDiffHighlight(first, diffFirst)
-        tvBarcode2.text = withDiffHighlight(second, diffSecond)
+    /** Markiert bei INCORRECT in allen drei Feldern die Zeichen, die abweichen. */
+    private fun highlightDifferences(first: String, second: String, third: String) {
+        val (diff1, diff23) = differingIndices(first, second + "\u0000" + third)
+        val diff2_3 = differingIndices(second, third)
+
+        val diff1Final = diff1.filter { it < first.length }.toSet()
+        val diff2Final = mutableSetOf<Int>()
+        val diff3Final = mutableSetOf<Int>()
+
+        for ((i, j) in diff23.withIndex()) {
+            if (j >= second.length + 1) {
+                diff3Final.add(j - (second.length + 1))
+            } else if (j >= 0 && j < second.length) {
+                diff2Final.add(j)
+            }
+        }
+
+        for ((i, j) in diff2_3.second.withIndex()) {
+            diff3Final.add(j)
+        }
+        for ((i, j) in diff2_3.first.withIndex()) {
+            diff2Final.add(j)
+        }
+
+        tvBarcode1.text = withDiffHighlight(first, diff1Final)
+        tvBarcode2.text = withDiffHighlight(second, diff2Final)
+        tvBarcode3.text = withDiffHighlight(third, diff3Final)
     }
 
     /**
@@ -349,9 +387,11 @@ class MainActivity : AppCompatActivity() {
     private fun resetAll() {
         handler.removeCallbacks(autoResetRunnable)
         barcode1 = null
+        barcode2 = null
         state = ScanState.WAITING_BARCODE1
         tvBarcode1.text = getString(R.string.placeholder_waiting)
         tvBarcode2.text = getString(R.string.placeholder_waiting)
+        tvBarcode3.text = getString(R.string.placeholder_waiting)
         tvResult.text = ""
         tvResult.setBackgroundResource(R.drawable.bg_field)
         tvResult.setTextColor(ContextCompat.getColor(this, R.color.text_primary))
